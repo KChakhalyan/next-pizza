@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
-
+import { Header } from "@/components/shared/Header";
 
 export default function Home() {
   return (
     <div>
-      Home Page
-      <Button variant={"outline"} className="cursor-pointer" >Click Me</Button>
+      Main Page
     </div>
   );
 }
