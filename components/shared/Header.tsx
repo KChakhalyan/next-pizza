@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                     <Image src="/logo.png" alt="logo" width={35} height={35} />
                     <div>
                         <h1 className='text-2xl uppercase font-black'>NEXT PIZZA</h1>
-                        <p className='text-sm text-gray-400 leading-3'>It couldn't be any tastier.</p>
+                        <p className='text-sm text-gray-400 leading-3'>It couldn&apos;t be any tastier.</p>
                     </div>
                 </div>
                 {/* Right side | Login */}
