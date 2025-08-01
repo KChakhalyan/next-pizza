@@ -22,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                     </div>
                 </div>
                 {/* Right side | Login */}
-                <div className='flex item-center gap-3'>
+                <div className='flex items-center gap-3'>
                     <Button variant="outline" className='cursor-pointer flex items-center gap-1'><User size={16} />Log In</Button>
                     <div>
                         <Button className='group relative cursor-pointer'>

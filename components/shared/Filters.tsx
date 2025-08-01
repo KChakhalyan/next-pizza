@@ -4,7 +4,6 @@ import { Title } from './Title';
 import { FilterCheckbox } from './FilterCheckbox';
 import { Input } from '../ui';
 import { RangeSlider } from './RangeSlider';
-import { Check } from 'lucide-react';
 import { CheckboxFiltersGroup } from './CheckboxFiltersGroup';
 
 interface FiltersProps {

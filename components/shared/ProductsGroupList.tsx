@@ -6,10 +6,16 @@ import React, { useEffect, useRef } from 'react';
 import { ProductCard } from './ProductCard';
 import { useCatrygoryStore } from '@/store/category';
 
+interface Product {
+    id: number;
+    name: string;
+    imageUrl: string;
+    items: { price: number }[];
+}
 
 interface ProductsGroupListProps {
     title: string;
-    products: any[];
+    products: Product[];
     listClassName?: string;
     categoryId: number;
     className?: string;
@@ -31,6 +37,7 @@ export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
     useEffect(() => {
         if (intersection?.isIntersecting) {
             setActiveCategoryId(categoryId);
+            console.log(title, `Category ${categoryId} is in view`);
         }
     }, [intersection?.isIntersecting, title, categoryId, setActiveCategoryId]);
 

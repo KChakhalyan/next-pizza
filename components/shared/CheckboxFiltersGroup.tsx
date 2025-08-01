@@ -21,11 +21,8 @@ interface CheckboxFiltersGroupProps {
 export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
     title,
     items,
-    defaultItems,
     limit = 5,
     searchInputPlaceholder = 'Search...',
-    onChange,
-    defaultValue,
     className,
 }) => {
     const [showAll, setshowAll] = useState(false);
