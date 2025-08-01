@@ -1,5 +1,5 @@
-import { Container, Filters, Title, Topbar } from "@/components/shared";
-import { ProductCard } from "@/components/shared/ProductCard";
+import { Container, Filters, Title, Topbar, ProductsGroupList } from "@/components/shared";
+
 
 
 
@@ -11,7 +11,7 @@ export default function Home() {
       </Container>
       <Topbar />
       <Container className="mt-10 pb-14">
-        <div className="flex gap-[60px]">
+        <div className="flex gap-[80px]">
           {/* Filter */}
           <div className="w-[250px]">
             <Filters />
@@ -19,11 +19,40 @@ export default function Home() {
           {/* Goods List */}
           <div className="flex-1">
             <div className="flex flex-col gap-16">
-              {/* <ProductsGroupList title="Pizzas" items={[1, 2, 3, 4, 5]} />
-              <ProductsGroupList title="Combos" items={[1, 2, 3, 4, 5]} /> */}
-              <ProductCard id={1} name="Peperoni" price={10} imageUrl="/products/peperoni.png" />
-              <ProductCard id={1} name="Peperoni" price={10} imageUrl="/products/peperoni.png" />
-              <ProductCard id={1} name="Peperoni" price={10} imageUrl="/products/peperoni.png" />
+              <ProductsGroupList
+                title="Pizzas"
+                products={[
+                  {
+                    id: 1,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  },
+                  {
+                    id: 2,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  },
+                  {
+                    id: 3,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  },
+                  {
+                    id: 4,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  }
+                ]}
+                categoryId={1}
+              />
             </div>
 
           </div>
