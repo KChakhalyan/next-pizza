@@ -53,6 +53,40 @@ export default function Home() {
                 ]}
                 categoryId={1}
               />
+              <ProductsGroupList
+                title="Breakfast "
+                products={[
+                  {
+                    id: 5,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  },
+                  {
+                    id: 6,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  },
+                  {
+                    id: 7,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  },
+                  {
+                    id: 8,
+                    name: "Pepperoni Pizza",
+                    price: [{ price: 12 }],
+                    imageUrl: "/products/peperoni.png",
+                    items: [{ price: 12 }]
+                  }
+                ]}
+                categoryId={2}
+              />
             </div>
 
           </div>
