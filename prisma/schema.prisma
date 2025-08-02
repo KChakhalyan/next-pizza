@@ -14,12 +14,85 @@ model User {
     password  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    Cart      Cart[]
+    Order     Order[]
+}
+
+model Category {
+    id       Int       @id @default(autoincrement())
+    name     String    @unique
+    products Product[]
 }
 
 model Product {
-    id        Int      @id @default(autoincrement())
+    id               Int                @id @default(autoincrement())
+    name             String
+    imageUrl         String
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    category         Category?          @relation(fields: [categoryId], references: [id])
+    categoryId       Int?
+    ingredient       Ingredient[]
+    ProductVariation ProductVariation[]
+}
+
+// ProductVariation. is the same as ProductItem in finished project on github
+model ProductVariation {
+    id        Int        @id @default(autoincrement())
+    price     Int
+    size      Int?
+    doughType String? // e.g., thin, thick  - тонкий, толстый тип теста
+    product   Product    @relation(fields: [productId], references: [id])
+    productId Int
+    CartItem  CartItem[]
+}
+
+model Ingredient {
+    id        Int        @id @default(autoincrement())
     name      String
+    price     Int
     imageUrl  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    products  Product[]
+    CartItem  CartItem[]
+}
+
+model Cart {
+    id          Int        @id @default(autoincrement())
+    user        User?      @relation(fields: [userId], references: [id])
+    userId      Int?
+    token       String?    @unique
+    totalAmount Int        @default(0)
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+    CartItem    CartItem[]
+}
+
+model CartItem {
+    id                 Int              @id @default(autoincrement())
+    productVariation   ProductVariation @relation(fields: [productVariationId], references: [id])
+    productVariationId Int
+    cart               Cart             @relation(fields: [cartId], references: [id])
+    cartId             Int
+    ingredients        Ingredient[]
+    quantity           Int
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
+}
+
+model Order {
+    id          Int         @id @default(autoincrement())
+    user        User?       @relation(fields: [userId], references: [id])
+    userId      Int
+    token       String      @unique
+    totalAmount Int
+    status      OrderStatus
+    paymetId    String?
+}
+
+enum OrderStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
 }
