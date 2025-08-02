@@ -46,7 +46,7 @@ model ProductVariation {
     id        Int        @id @default(autoincrement())
     price     Int
     size      Int?
-    doughType String? // e.g., thin, thick  - тонкий, толстый тип теста
+    doughType String[] // e.g., thin, thick  - тонкий, толстый тип теста
     product   Product    @relation(fields: [productId], references: [id])
     productId Int
     cartItem  CartItem[]
