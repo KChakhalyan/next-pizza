@@ -8,14 +8,18 @@ datasource db {
 }
 
 model User {
-    id        Int      @id @default(autoincrement())
-    fullName  String
-    email     String   @unique
-    password  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    Cart      Cart[]
-    Order     Order[]
+    id               Int                @id @default(autoincrement())
+    role             UserRole           @default(USER)
+    fullName         String
+    email            String             @unique
+    password         String
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    cart             Cart?
+    orders           Order[]
+    verificationCode VerificationCode[]
+    privider         String?
+    providerId       String?
 }
 
 model Category {
@@ -33,7 +37,7 @@ model Product {
     category         Category?          @relation(fields: [categoryId], references: [id])
     categoryId       Int?
     ingredient       Ingredient[]
-    ProductVariation ProductVariation[]
+    productVariation ProductVariation[]
 }
 
 // ProductVariation. is the same as ProductItem in finished project on github
@@ -44,7 +48,7 @@ model ProductVariation {
     doughType String? // e.g., thin, thick  - тонкий, толстый тип теста
     product   Product    @relation(fields: [productId], references: [id])
     productId Int
-    CartItem  CartItem[]
+    cartItem  CartItem[]
 }
 
 model Ingredient {
@@ -55,18 +59,18 @@ model Ingredient {
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
     products  Product[]
-    CartItem  CartItem[]
+    cartItem  CartItem[]
 }
 
 model Cart {
     id          Int        @id @default(autoincrement())
     user        User?      @relation(fields: [userId], references: [id])
-    userId      Int?
+    userId      Int?       @unique
     token       String?    @unique
     totalAmount Int        @default(0)
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt
-    CartItem    CartItem[]
+    cartItem    CartItem[]
 }
 
 model CartItem {
@@ -89,10 +93,34 @@ model Order {
     totalAmount Int
     status      OrderStatus
     paymetId    String?
+    items       Json
+    fullName    String
+    phone       String
+    address     String
+    email       String
+    comment     String?
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+}
+
+model VerificationCode {
+    id        Int      @id @default(autoincrement())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    Int      @unique
+    code      String   @unique
+    createdAt DateTime @default(now())
+
+    @@unique([userId, code])
 }
 
 enum OrderStatus {
     PENDING
     COMPLETED
     CANCELLED
+}
+
+enum UserRole {
+    USER
+    ADMIN
+    GUEST
 }
