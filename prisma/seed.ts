@@ -12,10 +12,12 @@ const generateProductVariation = ({
     productId,
     pizzaType,
     size,
+    price
 }: {
     productId: number;
     pizzaType?: 1 | 2;
     size?: 20 | 30 | 40;
+    price?: number;
 }): Prisma.ProductVariationUncheckedCreateInput => ({
     productId,
     price: randomDecimalNumber(190, 600),
@@ -87,9 +89,23 @@ async function up() {
     });
     await prisma.productVariation.createMany({
         data: [
+            // Пицца "Пепперони фреш"
             generateProductVariation({ productId: pizza1.id, pizzaType: 1, size: 20 }),
-            generateProductVariation({ productId: pizza1.id, pizzaType: 1, size: 30 }),
+            generateProductVariation({ productId: pizza1.id, pizzaType: 2, size: 30 }),
             generateProductVariation({ productId: pizza1.id, pizzaType: 2, size: 40 }),
+
+            // Пицца "Сырная"
+            generateProductVariation({ productId: pizza2.id, pizzaType: 1, size: 20 }),
+            generateProductVariation({ productId: pizza2.id, pizzaType: 1, size: 30 }),
+            generateProductVariation({ productId: pizza2.id, pizzaType: 1, size: 40 }),
+            generateProductVariation({ productId: pizza2.id, pizzaType: 2, size: 20 }),
+            generateProductVariation({ productId: pizza2.id, pizzaType: 2, size: 30 }),
+            generateProductVariation({ productId: pizza2.id, pizzaType: 2, size: 40 }),
+
+            // Пицца "Чоризо фреш"
+            generateProductVariation({ productId: pizza3.id, pizzaType: 1, size: 20 }),
+            generateProductVariation({ productId: pizza3.id, pizzaType: 2, size: 30 }),
+            generateProductVariation({ productId: pizza3.id, pizzaType: 2, size: 40 }),
         ]
     })
 }
