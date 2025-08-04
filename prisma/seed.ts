@@ -11,7 +11,6 @@ type DoughType = "Thin" | "Thick";
 
 /**
  * Формирует объект для ProductVariationUncheckedCreateInput.
- * Убрано поле pizzaType, т.к. его нет в схеме.
  */
 const generateProductVariation = ({
     productId,
@@ -86,91 +85,61 @@ async function up() {
     });
 
     // 5) Готовим вариации
-    const variations: Prisma.ProductVariationUncheckedCreateInput[] = [
-        // Для Pepperoni Fresh
-        generateProductVariation({
-            productId: pizza1.id,
-            size: 20,
-            doughType: ["Thin"],
-        }),
-        generateProductVariation({
-            productId: pizza1.id,
-            size: 30,
-            doughType: ["Thick"],
-        }),
-        generateProductVariation({
-            productId: pizza1.id,
-            size: 40,
-            doughType: ["Thick"],
-        }),
+    const variations: Prisma.ProductVariationUncheckedCreateInput[] = [];
 
-        // Для Cheese
-        generateProductVariation({
-            productId: pizza2.id,
-            size: 20,
+    // helper для вариаций
+    const addVariation = (productId: number, size?: 20 | 30 | 40) =>
+        variations.push({
+            productId,
+            price: randomDecimalNumber(190, 600),
+            size,
             doughType: ["Thin"],
-        }),
-        generateProductVariation({
-            productId: pizza2.id,
-            size: 30,
-            doughType: ["Thin"],
-        }),
-        generateProductVariation({
-            productId: pizza2.id,
-            size: 40,
-            doughType: ["Thin"],
-        }),
-        generateProductVariation({
-            productId: pizza2.id,
-            size: 20,
-            doughType: ["Thick"],
-        }),
-        generateProductVariation({
-            productId: pizza2.id,
-            size: 30,
-            doughType: ["Thick"],
-        }),
-        generateProductVariation({
-            productId: pizza2.id,
-            size: 40,
-            doughType: ["Thick"],
-        }),
+        });
 
-        // Для Fresh chorizo
-        generateProductVariation({
-            productId: pizza3.id,
-            size: 20,
-            doughType: ["Thin"],
-        }),
-        generateProductVariation({
-            productId: pizza3.id,
-            size: 30,
-            doughType: ["Thick"],
-        }),
-        generateProductVariation({
-            productId: pizza3.id,
-            size: 40,
-            doughType: ["Thick"],
-        }),
-    ];
+    // для трёх пицц
+    [pizza1.id, pizza2.id, pizza3.id].forEach((id) => {
+        addVariation(id, 20);
+        addVariation(id, 30);
+        addVariation(id, 40);
+    });
 
-    // 6) Дефолтная вариация для всех остальных продуктов из constants
+    // одна дефолтная вариация для всех продуктов из constants
     for (let id = 1; id <= products.length; id++) {
-        variations.push(
-            generateProductVariation({ productId: id, doughType: ["Thin"] })
-        );
+        addVariation(id);
     }
 
-    // 7) Сейвим все вариации
     await prisma.productVariation.createMany({ data: variations });
+
+    // 6) Сидим корзины
+    await prisma.cart.createMany({
+        data: [
+            { userId: 1, totalAmount: 0, token: "11111" },
+            { userId: 2, totalAmount: 0, token: "222222" },
+        ],
+    });
+
+    // 7) Сидим элементы корзины (nested write через create)
+    await prisma.cartItem.create({
+        data: {
+            productVariationId: 1,
+            cartId: 1,
+            quantity: 2,
+            ingredients: {
+                connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+            },
+        },
+    });
 }
 
 async function down() {
-    await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`;
+    // очищаем в обратном порядке зависимостей
+    await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE;`;
+    await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE "ProductVariation" RESTART IDENTITY CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE;`;
     await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE;`;
+    await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`;
 }
 
 async function main() {
@@ -184,4 +153,5 @@ async function main() {
     }
 }
 
+// Запуск сидирования
 main();
