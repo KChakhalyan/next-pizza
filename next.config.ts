@@ -4,4 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
 };
 
+module.exports = {
+  images: {
+    remotePatterns: [new URL('https://media.dodostatic.com/image/**')],
+  },
+}
 export default nextConfig;
