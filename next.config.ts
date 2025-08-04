@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 
 module.exports = {
   images: {
-    remotePatterns: [new URL('https://media.dodostatic.com/image/**')],
+    remotePatterns: [new URL('https://media.dodostatic.net/**')],
   },
 }
 export default nextConfig;

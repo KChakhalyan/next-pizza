@@ -1,11 +1,13 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useClickAway } from 'react-use';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Api } from '@/services/api-client';
+import { Product } from '@prisma/client';
 
 
 interface SearchInputProps {
@@ -14,12 +16,21 @@ interface SearchInputProps {
 
 export const SearchInput: React.FC<SearchInputProps> = ({ className }) => {
 
+
+    const [searchQuery, setSearchQuery] = useState('')
     const [focused, setFocused] = React.useState(false);
+    const [products, setProducts] = useState<Product[]>([])
     const ref = React.useRef<HTMLDivElement>(null);
 
     useClickAway(ref, () => {
         setFocused(false);
     });
+
+    useEffect(() => {
+        Api.products.search(searchQuery).then(items => {
+            setProducts(items)
+        })
+    }, [searchQuery])
     return (
 
         <>
@@ -32,21 +43,21 @@ export const SearchInput: React.FC<SearchInputProps> = ({ className }) => {
                     type="text"
                     placeholder="Search for products ..."
                     onFocus={() => setFocused(true)}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                 />
 
                 <div className={cn('absolute w-full bg-white rounded-xl py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30', focused && 'visible opacity-100 top-12')}>
-                    <Link href="/product/1" className='flex w-full items-center gap-3 hover:bg-primary/10 px-2 py-2 mb-2'>
-                        <Image src='https://media.dodostatic.com/image/r:584x584/0197c50ee71b7203888de6aa9a3ae9ae.avif' alt='peperoni' width={32} height={32} />
-                        <span>
-                            Pizza 1
-                        </span>
-                    </Link>
-                    <Link href="/product/1" className='flex w-full items-center gap-3 hover:bg-primary/10 px-2 py-2 mb-2'>
-                        <Image src='https://media.dodostatic.com/image/r:584x584/0197c50ee71b7203888de6aa9a3ae9ae.avif' alt='peperoni' width={32} height={32} />
-                        <span>
-                            Pizza 1
-                        </span>
-                    </Link>
+                    {
+                        products.map((product) => (
+                            <Link key={product.id} href={`/products/${product.id}`} className='flex w-full items-center gap-3 hover:bg-primary/10 px-2 py-2 mb-2'>
+                                <Image src={product.imageUrl} alt={product.name} width={32} height={32} />
+                                <span>
+                                    {product.name}
+                                </span>
+                            </Link>
+                        ))
+                    }
                 </div>
             </div >
         </>
