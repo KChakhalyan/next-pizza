@@ -24,8 +24,8 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
             <Title text="Filters" size="sm" className="mb-5 font-bold" />
             {/* Upper Checkboxes */}
             <div className='flex flex-col gap-4'>
-                <FilterCheckbox text="Can Takeaway" value="1" />
-                <FilterCheckbox text="New" value="2" />
+                <FilterCheckbox name='qwe' text="Can Takeaway" value="1" />
+                <FilterCheckbox name='qwer' text="New" value="2" />
             </div>
             {/* Filters with RangeSlidr */}
             <div className='mt-5 border-y border-neutral-100 py-6 pb-7'>
@@ -40,6 +40,7 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
 
             <CheckboxFiltersGroup
                 title='Ingredients'
+                name='ingredients'
                 className='mt-5'
                 limit={6}
                 defaultItems={items.slice(0, 6)}

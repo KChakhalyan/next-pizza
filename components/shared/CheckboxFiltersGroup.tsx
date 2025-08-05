@@ -17,6 +17,7 @@ interface CheckboxFiltersGroupProps {
     defaultValue?: string[];
     className?: string;
     slectedIds?: Set<string>;
+    name?: string
 
 }
 
@@ -28,7 +29,8 @@ export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
     loading,
     className,
     onClickCheckbox,
-    slectedIds
+    slectedIds,
+    name
 }) => {
     const [showAll, setshowAll] = useState(false);
     const [searchValue, setSearchValue] = useState('');
@@ -74,6 +76,7 @@ export const CheckboxFiltersGroup: React.FC<CheckboxFiltersGroupProps> = ({
                         endAdornment={item.endAdornment}
                         checked={slectedIds?.has(item.value)}
                         onCheckedChange={() => onClickCheckbox?.(item.value)}
+                        name={name}
                     />
                 ))}
             </div>
