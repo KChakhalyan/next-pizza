@@ -19,6 +19,7 @@ interface ProductsGroupListProps {
     listClassName?: string;
     categoryId: number;
     className?: string;
+
 }
 
 export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
@@ -26,7 +27,8 @@ export const ProductsGroupList: React.FC<ProductsGroupListProps> = ({
     products,
     listClassName,
     categoryId,
-    className
+    className,
+
 }) => {
     const setActiveCategoryId = useCatrygoryStore((state) => state.setActivId);
     const intersectionRef = useRef<HTMLDivElement>(null);
