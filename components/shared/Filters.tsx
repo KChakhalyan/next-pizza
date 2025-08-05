@@ -13,7 +13,7 @@ interface FiltersProps {
 }
 
 export const Filters: React.FC<FiltersProps> = ({ className }) => {
-    const { ingredients } = useFilterIngredients()
+    const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients()
 
     const items = ingredients.map((item) => ({
         value: String(item.id),
@@ -43,7 +43,12 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
                 className='mt-5'
                 limit={6}
                 defaultItems={items.slice(0, 6)}
-                items={items} />
+                items={items}
+                loading={loading}
+                onClickCheckbox={onAddId}
+                slectedIds={selectedIds}
+            />
+
         </div>
     );
 };
