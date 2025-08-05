@@ -1,3 +1,4 @@
+'use client'
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { Title } from './Title';
@@ -5,12 +6,19 @@ import { FilterCheckbox } from './FilterCheckbox';
 import { Input } from '../ui';
 import { RangeSlider } from './RangeSlider';
 import { CheckboxFiltersGroup } from './CheckboxFiltersGroup';
+import { useFilterIngredients } from '@/hooks/useFilterIngredients';
 
 interface FiltersProps {
     className?: string;
 }
 
 export const Filters: React.FC<FiltersProps> = ({ className }) => {
+    const { ingredients } = useFilterIngredients()
+
+    const items = ingredients.map((item) => ({
+        value: String(item.id),
+        text: item.name
+    }))
     return (
         <div className={cn('', className)}>
             <Title text="Filters" size="sm" className="mb-5 font-bold" />
@@ -34,45 +42,8 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
                 title='Ingredients'
                 className='mt-5'
                 limit={6}
-                defaultItems={[
-                    { text: 'Cheese', value: 'cheese' },
-                    { text: 'Pepperoni', value: 'pepperoni' },
-                    { text: 'Mushrooms', value: 'mushrooms' },
-                    { text: 'Onions', value: 'onions' },
-                    { text: 'Sausage', value: 'sausage' },
-                    { text: 'Bacon', value: 'bacon' },
-                    { text: 'Extra cheese', value: 'extra_cheese' },
-                ]}
-                items={[
-                    { text: 'Olives', value: 'olives' },
-                    { text: 'Green peppers', value: 'green_peppers' },
-                    { text: 'Pineapple', value: 'pineapple' },
-                    { text: 'Spinach', value: 'spinach' },
-                    { text: 'Tomatoes', value: 'tomatoes' },
-                    { text: 'Garlic', value: 'garlic' },
-                    { text: 'Jalapeños', value: 'jalapeños' },
-                    { text: 'Olives', value: 'olives' },
-                    { text: 'Green peppers', value: 'green_peppers' },
-                    { text: 'Pineapple', value: 'pineapple' },
-                    { text: 'Spinach', value: 'spinach' },
-                    { text: 'Tomatoes', value: 'tomatoes' },
-                    { text: 'Garlic', value: 'garlic' },
-                    { text: 'Jalapeños', value: 'jalapeños' },
-                    { text: 'Olives', value: 'olives' },
-                    { text: 'Green peppers', value: 'green_peppers' },
-                    { text: 'Pineapple', value: 'pineapple' },
-                    { text: 'Spinach', value: 'spinach' },
-                    { text: 'Tomatoes', value: 'tomatoes' },
-                    { text: 'Garlic', value: 'garlic' },
-                    { text: 'Jalapeños', value: 'jalapeños' },
-                    { text: 'Olives', value: 'olives' },
-                    { text: 'Green peppers', value: 'green_peppers' },
-                    { text: 'Pineapple', value: 'pineapple' },
-                    { text: 'Spinach', value: 'spinach' },
-                    { text: 'Tomatoes', value: 'tomatoes' },
-                    { text: 'Garlic', value: 'garlic' },
-                    { text: 'Jalapeños', value: 'jalapeños' },
-                ]} />
+                defaultItems={items.slice(0, 6)}
+                items={items} />
         </div>
     );
 };

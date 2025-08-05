@@ -11,6 +11,7 @@ interface Product {
     name: string;
     imageUrl: string;
     items: { price: number }[];
+    price: { price: number }[];
 }
 
 interface ProductsGroupListProps {
