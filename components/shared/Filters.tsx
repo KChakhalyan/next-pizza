@@ -7,19 +7,22 @@ import { RangeSlider } from './RangeSlider';
 import { CheckboxFiltersGroup } from './CheckboxFiltersGroup';
 import { useFilterIngredients } from '@/hooks/useFilterIngredients';
 import { useSet } from 'react-use';
+import qs from 'qs'
+import { useRouter } from 'next/navigation';
 
 interface FiltersProps {
     className?: string;
 }
 
 interface PriceRangeProps {
-    priceFrom: number
-    priceTo: number
+    priceFrom?: number
+    priceTo?: number
 }
 
 export const Filters: React.FC<FiltersProps> = ({ className }) => {
+    const router = useRouter()
     const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients()
-    const [priceRange, setPriceRange] = useState<PriceRangeProps>({ priceFrom: 0, priceTo: 1000 })
+    const [priceRange, setPriceRange] = useState<PriceRangeProps>({})
 
     const [sizes, { toggle: toggleSizes }] = useSet(new Set<string>([]));
     const [pizzaType, { toggle: togglePizzaTypes }] = useSet(new Set<string>([]));
@@ -40,11 +43,17 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
     }
 
     useEffect(() => {
-        console.log({
-            ingredients, priceRange, pizzaType, sizes
+        const filters = {
+            ...priceRange,
+            pizzaType: Array.from(pizzaType),
+            sizes: Array.from(sizes),
+            ingredients: Array.from(selectedIngredients)
+        }
 
-        })
-    }, [ingredients, priceRange, pizzaType, sizes])
+        const queryString = qs.stringify(filters, { arrayFormat: 'comma' })
+
+        router.push(`?${queryString}`)
+    }, [priceRange, pizzaType, sizes, selectedIngredients, router])
     return (
         <div className={cn('', className)}>
             <Title text="Filters" size="sm" className="mb-5 font-bold" />
@@ -90,7 +99,7 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
                         type='number' min={100} max={1000} placeholder='1000' value={String(priceRange.priceTo)} onChange={(e) => updatePrice('priceTo', Number(e.target.value))} />
                 </div>
                 <RangeSlider min={0} max={1000} step={10} value={[
-                    priceRange.priceFrom, priceRange.priceTo
+                    priceRange.priceFrom || 0, priceRange.priceTo || 1000
                 ]} onValueChange={([priceFrom, priceTo]) => setPriceRange({ priceFrom, priceTo })} />
             </div>
             {/* Checkbox Filters Group */}
