@@ -1,12 +1,12 @@
 'use client'
 import { cn } from '@/lib/utils';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Title } from './Title';
-import { FilterCheckbox } from './FilterCheckbox';
 import { Input } from '../ui';
 import { RangeSlider } from './RangeSlider';
 import { CheckboxFiltersGroup } from './CheckboxFiltersGroup';
 import { useFilterIngredients } from '@/hooks/useFilterIngredients';
+import { useSet } from 'react-use';
 
 interface FiltersProps {
     className?: string;
@@ -18,8 +18,14 @@ interface PriceRangeProps {
 }
 
 export const Filters: React.FC<FiltersProps> = ({ className }) => {
-    const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients()
+    const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients()
     const [priceRange, setPriceRange] = useState<PriceRangeProps>({ priceFrom: 0, priceTo: 1000 })
+
+    const [sizes, { toggle: toggleSizes }] = useSet(new Set<string>([]));
+    const [pizzaType, { toggle: togglePizzaTypes }] = useSet(new Set<string>([]));
+
+
+
 
     const items = ingredients.map((item) => ({
         value: String(item.id),
@@ -32,14 +38,42 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
             [name]: value
         })
     }
+
+    useEffect(() => {
+        console.log({
+            ingredients, priceRange, pizzaType, sizes
+
+        })
+    }, [ingredients, priceRange, pizzaType, sizes])
     return (
         <div className={cn('', className)}>
             <Title text="Filters" size="sm" className="mb-5 font-bold" />
             {/* Upper Checkboxes */}
-            <div className='flex flex-col gap-4'>
-                <FilterCheckbox name='qwe' text="Can Takeaway" value="1" />
-                <FilterCheckbox name='qwer' text="New" value="2" />
-            </div>
+            <CheckboxFiltersGroup
+                title='Sizes'
+                name='sizes'
+                className='mt-5'
+                selected={sizes}
+                onClickCheckbox={toggleSizes}
+                items={[
+                    { text: '20', value: '20' },
+                    { text: '30', value: '30' },
+                    { text: '40', value: '40' }
+                ]}
+            />
+            <CheckboxFiltersGroup
+                title='PizzaType'
+                name='pizzaType'
+                className='mt-5'
+                onClickCheckbox={togglePizzaTypes}
+                selected={pizzaType}
+                items={[
+                    { text: 'Thin', value: '1' },
+                    { text: 'Traditional', value: '2' }
+                ]}
+            />
+
+
             {/* Filters with RangeSlidr */}
             <div className='mt-5 border-y border-neutral-100 py-6 pb-7'>
                 <p className='font-bold mb-3'>Price</p>
@@ -70,7 +104,7 @@ export const Filters: React.FC<FiltersProps> = ({ className }) => {
                 items={items}
                 loading={loading}
                 onClickCheckbox={onAddId}
-                slectedIds={selectedIds}
+                selected={selectedIngredients}
             />
 
         </div>
